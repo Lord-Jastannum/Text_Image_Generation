@@ -15,3 +15,4 @@ Prerequisites:
   Flask
   An account on Gemini to get an API key
 
+git clone https://github.com/Lord-Jastannum/Text_Image_Generation
