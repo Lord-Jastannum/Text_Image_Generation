@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text to Image Generator</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Text to Image Generator</h1>
+        <form id="generate-form">
+            <label for="description">Description:</label><br>
+            <input type="text" id="description" name="description" required><br><br>
+            <button type="submit">Generate Image</button>
+        </form>
+        <div id="loader">Loading...</div>
+        <div id="image">
+            <img id="generated-img" src="" alt="Generated Image">
+        </div>
+    </div>
+    <script>
+        document.getElementById('generate-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const description = document.getElementById('description').value;
+            document.getElementById('loader').style.display = 'block';
+            fetch('/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ description })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loader').style.display = 'none';
+                if (data.image_url) {
+                    document.getElementById('generated-img').src = data.image_url;
+                    document.getElementById('generated-img').style.display = 'block';
+                } else {
+                    alert('Error generating image: ' + data.error);
+                }
+            })
+            .catch(error => {
+                document.getElementById('loader').style.display = 'none';
+                alert('Error generating image: ' + error.message);
+            });
+        });
+    </script>
+</body>
+</html>
